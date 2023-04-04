@@ -130,4 +130,12 @@ void affairslist::add_affairs(int kind, std::string name, int day,int start_time
     for(int i=0;i<17;i++)thisaffair.week[i]=week[i];
     for(int i=0;i<student.getSize();i++)thisaffair.student.push_back(student[i]);
     list.push_back(thisaffair);
+    for(int i=list.getSize()-1;i>0;i--){
+        if(list[i].kind<list[i-1].kind||(list[i].kind==list[i-1].kind&&list[i].name<list[i-1].name)){
+            affairs temp=list[i];
+            list[i]=list[i-1];
+            list[i-1]=temp;
+        }
+        else break;
+    }
 }
