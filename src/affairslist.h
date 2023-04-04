@@ -25,7 +25,7 @@ class affairs
         int start_time;
         //事务结束时间，0-23。
         int end_time;
-        //事务地点
+        //事务地点,如果是线上则为网址（www开头）。
         std::string location;
         //考试时间
         std::string exam_time;
