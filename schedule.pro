@@ -12,7 +12,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     src/func/jsoncpp.cpp \
-    src/affairslist.cpp
+    src/affairslist.cpp \
+    src/schedule.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -20,7 +21,9 @@ HEADERS += \
     src/func/json/json-forwards.h \
     src/func/hashmap.h \
     src/func/vector.h \
-    src/affairslist.h
+    src/affairslist.h \
+    src/timetable.h \
+    src/schedule.h
 
 FORMS += \
     mainwindow.ui
