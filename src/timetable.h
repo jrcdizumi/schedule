@@ -1,12 +1,10 @@
 #ifndef TIMETABLE_H
 #define TIMETABLE_H
 
+#include<vector>
 #include "func/vector.h"
+using namespace std;
 
-//记录
-class tmplist{
-
-};
 class Timetable {
 public:
     static const int WEEKS = 16;
@@ -14,7 +12,12 @@ public:
     static const int HOURS = 24;
     Timetable();
     //最后一维[0]表示课程id，[1]表示课程类型
-    int timetable[WEEKS+1][DAYS][HOURS][2]; 
-    bool add_to_timetable(bool week[17], int day, int start_time, int end_time, int id,int kind);
+    vector<int> timetable[WEEKS+1][DAYS][HOURS]; 
+    //将课表中某个时间段改为某个事务
+    void add_to_timetable(int week, int day, int start_time, int end_time, int id);
+    //将课表中某个时间段清空
+    void remove_from_timetable(int week, int day, int start_time, int end_time);
+    //获取某个时间段的课表
+    Vector<int> get_time_timetable(int week,int day,int start_time,int end_time);
 };
 #endif // TIMETABLE_H
