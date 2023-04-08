@@ -13,7 +13,7 @@ class affairs
         affairs();
         //拥有该事务的学生名单
         Vector<std::string> student;
-        //事务类型，0为课程，1为集体活动，2为个人活动，3为临时事务,4为已删除。
+        //事务类型，0为课程，1为活动，2为临时事务,3为已删除。
         int kind; 
         //事务名称
         std::string name;

@@ -4,7 +4,7 @@ affairs::affairs()
 {
     kind=-1;
     name="";
-    for(int i=0;i<17;i++)week[i]=false;
+    for(int i=1;i<17;i++)week[i]=false;
     day=-1;
     start_time=-1;
     end_time=-1;
