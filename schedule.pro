@@ -11,18 +11,20 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    src/func/jsoncpp.cpp \
+    func/jsoncpp.cpp \
     src/affairslist.cpp \
     src/schedule.cpp
 
 HEADERS += \
     mainwindow.h \
-    src/func/json/json.h \
-    src/func/json/json-forwards.h \
-    src/func/hashmap.h \
-    src/func/vector.h \
+    func/json/json.h \
+    func/json/json-forwards.h \
+    func/hashmap.h \
+    func/vector.h \
+    func/trie.h \
     src/affairslist.h \
-    src/schedule.h
+    src/schedule.h 
+    
 
 FORMS += \
     mainwindow.ui

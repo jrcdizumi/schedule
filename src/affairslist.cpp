@@ -1,5 +1,4 @@
 #include "affairslist.h"
-
 affairs::affairs()
 {
     kind=-1;
@@ -53,6 +52,7 @@ affairslist::affairslist()
                     thisaffair.student.push_back(jsstudent[j].asInt());
                 }
             list.push_back(thisaffair);
+            serach_trie.insert(thisaffair.name,i);
         }
     }
 };
@@ -87,39 +87,16 @@ affairslist::~affairslist()
     out<<writer.write(root);
     out.close();
 };
-Vector<affairs> affairslist::search_affairs(int kind,std::string name,int student_id)
+Vector<affairs> affairslist::search_affairs(std::string name,int student_id)
 {
     Vector<affairs> result;
-    int left = 0, right = list.getSize() - 1;
-    while (left <= right) {
-        int mid = (left + right) / 2;
-        if (list[mid].kind == kind && list[mid].name == name) {
-            int l1=mid-1,r1=mid+1;
-            while(l1>=0&&list[l1].kind==kind&&list[l1].name==name)l1--;
-            while(r1<list.getSize()&&list[r1].kind==kind&&list[r1].name==name)r1++;
-            for(int i=l1+1;i<r1;i++){
-                int l2=0,r2=list[i].student.getSize()-1;
-                while(l2<=r2){
-                    int mid2=(l2+r2)/2;
-                    if(list[i].student[mid2]==student_id){
-                        result.push_back(list[i]);
-                        break;
-                    }
-                    else if(list[i].student[mid2]<student_id){
-                        l2=mid2+1;
-                    }
-                    else{
-                        r2=mid2-1;
-                    }
-                }
-           }
-            break;
-        }
-        else if (list[mid].kind < kind || (list[mid].kind == kind && list[mid].name < name)) {
-            left = mid + 1;
-        }
-        else {
-            right = mid - 1;
+    Vector<int> ans=serach_trie.search(name);
+    for(int i=0;i<ans.getSize();i++){
+        for(int i=0;i<list[ans[i]].student.getSize();i++){
+            if(list[ans[i]].student[i]==student_id){
+                result.push_back(list[ans[i]]);
+                break;
+            }
         }
     }
     return result;
@@ -128,14 +105,8 @@ void affairslist::add_affairs(int kind, std::string name, int day,int start_time
 {
     affairs thisaffair(kind,name,day,start_time,end_time,location,exam_time,exam_location);
     for(int i=0;i<17;i++)thisaffair.week[i]=week[i];
-    for(int i=0;i<student.getSize();i++)thisaffair.student.push_back(student[i]);
+    thisaffair.student=student;
     list.push_back(thisaffair);
-    for(int i=list.getSize()-1;i>0;i--){
-        if(list[i].kind<list[i-1].kind||(list[i].kind==list[i-1].kind&&list[i].name<list[i-1].name)){
-            affairs temp=list[i];
-            list[i]=list[i-1];
-            list[i-1]=temp;
-        }
-        else break;
-    }
+    serach_trie.insert(name,list.getSize()-1);
 }
+affairslist Affairslist;

@@ -7,6 +7,7 @@
 #include "../func/hashmap.h"
 #include "../func/json/json.h"
 #include <fstream>
+#include "trie.h"
 class affairs
 {
     public:
@@ -39,9 +40,10 @@ class affairslist
 {
     public:
         Vector<affairs> list;
+        Trie serach_trie;
         affairslist();
         ~affairslist();
-        Vector<affairs> search_affairs(int kind,std::string name,int student_id);
+        Vector<affairs> search_affairs(std::string name,int student_id);
         void add_affairs(int kind, std::string name, int day,int start_time, int end_time, std::string location, std::string exam_time, std::string exam_location,int week[17],Vector<int> student);
 };
 #endif // AFFAIRSLIST_H
