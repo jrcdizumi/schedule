@@ -8,12 +8,12 @@ mylist::mylist(){
         }
     }
 }
-void mylist::add_affairs(affairs* a){
+bool mylist::add_affairs(affairs* a){
     //判断是否冲突
     for(int i=1;i<=16;i++){
         for(int j=(*a).start_time;j<(*a).end_time;i++){
             if((*a).week[i]&&((*timetable[i][(*a).day][j]).kind<=(*a).kind||((*a).kind==2&&(*timetable[i][(*a).day][j]).kind<(*a).kind))){
-                return;
+                return false;
             }
         }
     }
@@ -25,7 +25,7 @@ void mylist::add_affairs(affairs* a){
             }
         }
     }
-    return;
+    return true;
 }
 bool Schedule::add_affairs(affairs* a,Vector<int> student_id){
     bool flag=1;
@@ -56,7 +56,20 @@ bool Schedule::add_affairs(affairs* a,Vector<int> student_id){
                     }
                 }
             }
-            
+            int minx=114514,x;
+            for(int i=0;i<=23;i++){
+                if(all_timetable[i]<minx){
+                    minx=all_timetable[i];
+                    x=i;
+                }
+            }
+            (*a).start_time=x;
+            (*a).end_time=x+1;
+            for(int i=0;i<student_id.getSize();i++){
+                if(!all_list[student_id[i]].add_affairs(a)){
+                    
+                }
+            }
         }
     }
     return true;

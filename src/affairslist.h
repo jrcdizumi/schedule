@@ -3,16 +3,16 @@
 
 #include <string>
 #include <iostream>
-#include "func/vector.h"
-#include "func/hashmap.h"
-#include "func/json/json.h"
+#include "../func/vector.h"
+#include "../func/hashmap.h"
+#include "../func/json/json.h"
 #include <fstream>
 class affairs
 {
     public:
         affairs();
         //拥有该事务的学生名单
-        Vector<std::string> student;
+        Vector<int> student;
         //事务类型，0为课程，1为活动，2为临时事务,3为已删除。
         int kind; 
         //事务名称
@@ -41,7 +41,7 @@ class affairslist
         Vector<affairs> list;
         affairslist();
         ~affairslist();
-        Vector<affairs> search_affairs(int kind,std::string name,std::string student_id);
-        void add_affairs(int kind, std::string name, int day,int start_time, int end_time, std::string location, std::string exam_time, std::string exam_location,int week[17],Vector<string> student);
+        Vector<affairs> search_affairs(int kind,std::string name,int student_id);
+        void add_affairs(int kind, std::string name, int day,int start_time, int end_time, std::string location, std::string exam_time, std::string exam_location,int week[17],Vector<int> student);
 };
 #endif // AFFAIRSLIST_H

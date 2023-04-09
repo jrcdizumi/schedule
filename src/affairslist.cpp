@@ -50,7 +50,7 @@ affairslist::affairslist()
                 }
                 Json::Value jsstudent=root[i]["student"];
                 for(int j=0;j<jsstudent.size();j++){
-                    thisaffair.student.push_back(jsstudent[j].asString());
+                    thisaffair.student.push_back(jsstudent[j].asInt());
                 }
             list.push_back(thisaffair);
         }
@@ -87,7 +87,7 @@ affairslist::~affairslist()
     out<<writer.write(root);
     out.close();
 };
-Vector<affairs> affairslist::search_affairs(int kind,std::string name,std::string student_id)
+Vector<affairs> affairslist::search_affairs(int kind,std::string name,int student_id)
 {
     Vector<affairs> result;
     int left = 0, right = list.getSize() - 1;
@@ -124,7 +124,7 @@ Vector<affairs> affairslist::search_affairs(int kind,std::string name,std::strin
     }
     return result;
 }
-void affairslist::add_affairs(int kind, std::string name, int day,int start_time, int end_time, std::string location, std::string exam_time, std::string exam_location, int week[17], Vector<string> student)
+void affairslist::add_affairs(int kind, std::string name, int day,int start_time, int end_time, std::string location, std::string exam_time, std::string exam_location, int week[17], Vector<int> student)
 {
     affairs thisaffair(kind,name,day,start_time,end_time,location,exam_time,exam_location);
     for(int i=0;i<17;i++)thisaffair.week[i]=week[i];
