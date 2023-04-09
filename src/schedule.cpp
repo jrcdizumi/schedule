@@ -65,12 +65,23 @@ bool Schedule::add_affairs(affairs* a,Vector<int> student_id){
             }
             (*a).start_time=x;
             (*a).end_time=x+1;
-            for(int i=0;i<student_id.getSize();i++){
-                if(!all_list[student_id[i]].add_affairs(a)){
-                    
-                }
+
+        }            
+        Vector<int> new_student_id;
+        for(int i=0;i<student_id.getSize();i++){
+            if(all_list[student_id[i]].add_affairs(a)){
+                new_student_id.push_back(student_id[i]);
             }
         }
+        if(new_student_id.getSize()==0){
+            return false;
+        }
+        (*a).student=new_student_id;
     }
-    return true;
+    else {
+        for(int i=0;i<student_id.getSize();i++){
+            all_list[student_id[i]].add_affairs(a);
+        }
+        (*a).student=student_id;
+    }
 }
