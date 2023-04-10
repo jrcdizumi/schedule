@@ -3,7 +3,7 @@ mylist::mylist(){
     for(int i=1;i<=16;i++){
         for(int j=0;j<=6;j++){
             for(int k=0;k<=23;k++){
-                timetable[i][j][k]=-1;
+                timetable[i][j][k].clear();
             }
         }
     }
@@ -13,7 +13,7 @@ bool mylist::add_affairs(int a){
     affairs tmpaffairs=Affairslist.list[a];
     for(int i=1;i<=16;i++){
         for(int j=tmpaffairs.start_time;j<tmpaffairs.end_time;i++){
-            if(tmpaffairs.week[i]&&(Affairslist.list[timetable[i][tmpaffairs.day][j]].kind<=tmpaffairs.kind||(tmpaffairs.kind==2&&Affairslist.list[timetable[i][tmpaffairs.day][j]].kind<=tmpaffairs.kind))){
+            if(timetable[i][tmpaffairs.day][j].size()!=0&&tmpaffairs.week[i]&&(Affairslist.list[timetable[i][tmpaffairs.day][j][0]].kind<=tmpaffairs.kind||(tmpaffairs.kind==2&&Affairslist.list[timetable[i][tmpaffairs.day][j][0]].kind<tmpaffairs.kind))){
                 return false;
             }
         }
@@ -22,7 +22,11 @@ bool mylist::add_affairs(int a){
     for(int i=1;i<=16;i++){
         for(int j=tmpaffairs.start_time;j<tmpaffairs.end_time;i++){
             if(tmpaffairs.week[i]){
-                timetable[i][tmpaffairs.day][j]=a;
+                if(Affairslist.list[timetable[i][tmpaffairs.day][j][0]].kind==2)timetable[i][tmpaffairs.day][j].push_back(a);
+                else {
+                    timetable[i][tmpaffairs.day][j].clear();
+                    timetable[i][tmpaffairs.day][j].push_back(a);
+                }
             }
         }
     }
@@ -34,7 +38,7 @@ bool Schedule::add_affairs(int a){
     for(int i=0;i<tmpaffairs.student.getSize();i++){
         for(int j=1;j<=16;j++){
             for(int k=tmpaffairs.start_time;k<tmpaffairs.end_time;k++){
-                if(tmpaffairs.week[j]&&(tmpaffairs.kind>=Affairslist.list[all_list[tmpaffairs.student[i]].timetable[j][tmpaffairs.day][k]].kind||(tmpaffairs.kind==2&&Affairslist.list[all_list[tmpaffairs.student[i]].timetable[j][tmpaffairs.day][k]].kind<tmpaffairs.kind))){
+                if(all_list[tmpaffairs.student[i]].timetable[j][tmpaffairs.day][k].size()!=0&&tmpaffairs.week[j]&&(tmpaffairs.kind>=Affairslist.list[all_list[tmpaffairs.student[i]].timetable[j][tmpaffairs.day][k][0]].kind||(tmpaffairs.kind==2&&Affairslist.list[all_list[tmpaffairs.student[i]].timetable[j][tmpaffairs.day][k][0]].kind<tmpaffairs.kind))){
                     flag=0;
                     break;
                 }
@@ -51,7 +55,7 @@ bool Schedule::add_affairs(int a){
                 if(tmpaffairs.week[i]){
                     for(int j=0;j<=23;j++){
                         for(int k=0;k<tmpaffairs.student.getSize();k++){
-                            if(all_list[tmpaffairs.student[k]].timetable[i][tmpaffairs.day][j]!=NULL){
+                            if(all_list[tmpaffairs.student[k]].timetable[i][tmpaffairs.day][j].size()!=0&&all_list[tmpaffairs.student[k]].timetable[i][tmpaffairs.day][j][0]<1){
                                 all_timetable[j]++;
                             }
                         }
@@ -75,12 +79,34 @@ bool Schedule::add_affairs(int a){
                 new_student_id.push_back(tmpaffairs.student[i]);
             }
         }
+        tmpaffairs.student=new_student_id;
+        Affairslist.list.pop_back();
         if(new_student_id.getSize()==0){
             return false;
         }
-        tmpaffairs.student=new_student_id;
     }
     else {
-        return false;
+        for(int i=0;i<tmpaffairs.student.getSize();i++){
+            all_list[tmpaffairs.student[i]].add_affairs(a);
+        }
     }
+}
+bool mylist::delete_affairs(int a){
+    affairs tmpaffairs=Affairslist.list[a];
+    //更新时间表
+    for(int i=1;i<=16;i++){
+        for(int j=tmpaffairs.start_time;j<tmpaffairs.end_time;i++){
+            if(tmpaffairs.week[i]){
+                timetable[i][tmpaffairs.day][j].clear();
+            }
+        }
+    }
+    return true;
+}
+bool Schedule::delete_affairs(int a){
+    affairs tmpaffairs=Affairslist.list[a];
+    for(int i=0;i<tmpaffairs.student.getSize();i++){
+        all_list[tmpaffairs.student[i]].delete_affairs(a);
+    }
+    return true;
 }
