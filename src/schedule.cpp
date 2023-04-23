@@ -62,7 +62,7 @@ bool Schedule::add_affairs(int a){
                     }
                 }
             }
-            int minx=114514,x;
+            int minx=114514,x=0;
             for(int i=0;i<=23;i++){
                 if(all_timetable[i]<minx){
                     minx=all_timetable[i];
@@ -71,17 +71,18 @@ bool Schedule::add_affairs(int a){
             }
             tmpaffairs.start_time=x;
             tmpaffairs.end_time=x+1;
-
-        }            
-        Vector<int> new_student_id;
-        for(int i=0;i<tmpaffairs.student.getSize();i++){
-            if(all_list[tmpaffairs.student[i]].add_affairs(a)){
-                new_student_id.push_back(tmpaffairs.student[i]);
+            Vector<int> new_student_id;
+            for(int i=0;i<tmpaffairs.student.getSize();i++){
+                if(all_list[tmpaffairs.student[i]].add_affairs(a)){
+                    new_student_id.push_back(tmpaffairs.student[i]);
+                }
+            }
+            tmpaffairs.student=new_student_id;
+            if(new_student_id.getSize()==0){
+                return false;
             }
         }
-        tmpaffairs.student=new_student_id;
-        Affairslist.list.pop_back();
-        if(new_student_id.getSize()==0){
+        else{
             return false;
         }
     }
@@ -89,7 +90,9 @@ bool Schedule::add_affairs(int a){
         for(int i=0;i<tmpaffairs.student.getSize();i++){
             all_list[tmpaffairs.student[i]].add_affairs(a);
         }
+        return true;
     }
+    return true;
 }
 bool mylist::delete_affairs(int a){
     affairs tmpaffairs=Affairslist.list[a];

@@ -23,8 +23,8 @@ HEADERS += \
     func/vector.h \
     func/trie.h \
     src/affairslist.h \
-    src/schedule.h 
-    
+    src/schedule.h \
+    func/trie.h
 
 FORMS += \
     mainwindow.ui

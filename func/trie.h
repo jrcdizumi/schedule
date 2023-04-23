@@ -7,7 +7,7 @@ struct TrieNode {
     Vector<int> is_end; // 标记是否为单词结尾
     TrieNode* next[1000]; // 指向下一个节点的指针数组
     TrieNode() {
-        is_end = -1;
+        is_end.clear();
         for(int i = 0; i < 1000; i++)
             next[i] = nullptr;
     }
@@ -34,7 +34,8 @@ public:
         TrieNode* node = root;
         for (char c : word) {
             if (node->next[c + 128] == nullptr) {
-                return -1;
+                Vector<int> empty_vector;
+                return empty_vector;
             }
             node = node->next[c + 128];
         }

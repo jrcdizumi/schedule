@@ -1,22 +1,21 @@
 #include "mainwindow.h"
 #include "src/affairslist.h"
-#include "src/func/vector.h"
+#include "func/vector.h"
 #include <iostream>
 #include <QApplication>
 using namespace std;
-
+extern affairslist Affairslist;
 int main(int argc, char *argv[])
 {
     QApplication b(argc, argv);
     MainWindow w;
     w.show();
-    affairslist a;
     int week[17]={0};
-    Vector<string> student;
-    student.push_back("2018010101");
-    student.push_back("2018010102");
-    a.add_affairs(1,"test",1,1,2,"test","test","test",week,student);
-    Vector<affairs> result=a.search_affairs(1,"test","2018010101");
+    Vector<int> student;
+    student.push_back(1);
+    student.push_back(2);
+    Affairslist.add_affairs(1,"test",1,1,2,"test","test","test",week,student);
+    Vector<affairs> result=Affairslist.search_affairs("test",1);
     for(int i=0;i<result.getSize();i++){
         cout<<result[i].kind<<endl;
         cout<<result[i].name<<endl;

@@ -7,7 +7,7 @@
 #include "../func/hashmap.h"
 #include "../func/json/json.h"
 #include <fstream>
-#include "trie.h"
+#include "../func/trie.h"
 class affairs
 {
     public:
