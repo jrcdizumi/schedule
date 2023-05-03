@@ -110,13 +110,13 @@ void affairslist::add_affairs(int kind, std::string name, int day,int start_time
     serach_trie.insert(name,list.getSize()-1);
 }
 bool affairslist::update_affairs(int a,int nowweek){
-    affairs tmpaffairs=Affairslist.list[a];
+    affairs tmpaffairs=list[a];
     for(int i=nowweek+1;i<=16;i++){
         if(tmpaffairs.week[i]){
             return 0;
         }
     }
-    Affairslist.list[a].kind=3;
+    list[a].kind=3;
     return 1;
 }
 affairslist Affairslist;
