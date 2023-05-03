@@ -44,6 +44,9 @@ class affairslist
         affairslist();
         ~affairslist();
         Vector<affairs> search_affairs(std::string name,int student_id);
+        //添加事务
         void add_affairs(int kind, std::string name, int day,int start_time, int end_time, std::string location, std::string exam_time, std::string exam_location,int week[17],Vector<int> student);
+        //更新事务
+        bool update_affairs(int a,int nowweek);
 };
 #endif // AFFAIRSLIST_H

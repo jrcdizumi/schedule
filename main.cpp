@@ -14,8 +14,8 @@ int main(int argc, char *argv[])
     Vector<int> student;
     student.push_back(1);
     student.push_back(2);
-    Affairslist.add_affairs(1,"test",1,1,2,"test","test","test",week,student);
-    Vector<affairs> result=Affairslist.search_affairs("test",1);
+    Affairslist.add_affairs(1,"我日",1,1,2,"test","test","test",week,student);
+    Vector<affairs> result=Affairslist.search_affairs("我日",1);
     for(int i=0;i<result.getSize();i++){
         cout<<result[i].kind<<endl;
         cout<<result[i].name<<endl;

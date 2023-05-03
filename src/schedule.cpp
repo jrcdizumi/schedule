@@ -113,3 +113,4 @@ bool Schedule::delete_affairs(int a){
     }
     return true;
 }
+
