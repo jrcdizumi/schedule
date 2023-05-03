@@ -111,6 +111,7 @@ bool Schedule::delete_affairs(int a){
     for(int i=0;i<tmpaffairs.student.getSize();i++){
         all_list[tmpaffairs.student[i]].delete_affairs(a);
     }
+    Affairslist.list[a].kind=3;
     return true;
 }
 
