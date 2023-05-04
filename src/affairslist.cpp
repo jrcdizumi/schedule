@@ -87,13 +87,13 @@ affairslist::~affairslist()
     out<<writer.write(root);
     out.close();
 };
-Vector<affairs> affairslist::search_affairs(std::string name,int student_id)
+Vector<affairs> affairslist::search_affairs(std::string name,int student_id,int kind)
 {
     Vector<affairs> result;
     Vector<int> ans=serach_trie.search(name);
     for(int i=0;i<ans.getSize();i++){
         for(int i=0;i<list[ans[i]].student.getSize();i++){
-            if(list[ans[i]].student[i]==student_id){
+            if(list[ans[i]].student[i]==student_id&&list[ans[i]].kind==kind){
                 result.push_back(list[ans[i]]);
                 break;
             }
