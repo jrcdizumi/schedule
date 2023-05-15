@@ -13,7 +13,8 @@ SOURCES += \
     mainwindow.cpp \
     func/jsoncpp.cpp \
     src/affairslist.cpp \
-    src/schedule.cpp
+    src/schedule.cpp \
+    todaycourseinfo.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -24,10 +25,12 @@ HEADERS += \
     func/trie.h \
     src/affairslist.h \
     src/schedule.h \
-    func/trie.h
+    func/trie.h \
+    todaycourseinfo.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    todaycourseinfo.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

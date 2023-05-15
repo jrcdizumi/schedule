@@ -20,7 +20,8 @@ public:
 class Schedule{
 public:
     //每个学生的时间表
-    Vector<mylist> all_list;
+    Vector<mylist> all_list{128};
+    Schedule();
     //添加事务
     bool add_affairs(int a);
     //删除事务

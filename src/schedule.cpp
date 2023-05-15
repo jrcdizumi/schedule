@@ -12,7 +12,7 @@ bool mylist::add_affairs(int a){
     //判断是否冲突
     affairs tmpaffairs=Affairslist.list[a];
     for(int i=1;i<=16;i++){
-        for(int j=tmpaffairs.start_time;j<tmpaffairs.end_time;i++){
+        for(int j=tmpaffairs.start_time;j<tmpaffairs.end_time;j++){
             if(timetable[i][tmpaffairs.day][j].size()!=0&&tmpaffairs.week[i]&&(Affairslist.list[timetable[i][tmpaffairs.day][j][0]].kind<=tmpaffairs.kind||(tmpaffairs.kind==2&&Affairslist.list[timetable[i][tmpaffairs.day][j][0]].kind<tmpaffairs.kind))){
                 return false;
             }
@@ -20,15 +20,19 @@ bool mylist::add_affairs(int a){
     }
     //更新时间表
     for(int i=1;i<=16;i++){
-        for(int j=tmpaffairs.start_time;j<tmpaffairs.end_time;i++){
+        for(int j=tmpaffairs.start_time;j<tmpaffairs.end_time;j++){
             if(tmpaffairs.week[i]){
-                if(Affairslist.list[timetable[i][tmpaffairs.day][j][0]].kind==2)timetable[i][tmpaffairs.day][j].push_back(a);
-                else {
-                    timetable[i][tmpaffairs.day][j].clear();
-                    timetable[i][tmpaffairs.day][j].push_back(a);
+                if(timetable[i][tmpaffairs.day][j].empty())timetable[i][tmpaffairs.day][j].push_back(a);
+                else{
+                    if(Affairslist.list[timetable[i][tmpaffairs.day][j][0]].kind==2)timetable[i][tmpaffairs.day][j].push_back(a);
+                    else {
+                        timetable[i][tmpaffairs.day][j].clear();
+                        timetable[i][tmpaffairs.day][j].push_back(a);
+                    }
                 }
             }
         }
+
     }
     return true;
 }
@@ -114,4 +118,8 @@ bool Schedule::delete_affairs(int a){
     Affairslist.list[a].kind=3;
     return true;
 }
+Schedule::Schedule(){
+
+}
+Schedule schedule;
 
