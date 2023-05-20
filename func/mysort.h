@@ -1,6 +1,6 @@
 #ifndef MYSORT_H
 #define MYSORT_H
-
+#include<iostream>
 template<typename T, typename Compare>
 void quickSort(T arr[], int left, int right, Compare cmp) {
     if (left >= right) {

@@ -8,15 +8,16 @@
 #include "../func/json/json.h"
 #include <fstream>
 #include "../func/trie.h"
+#include <vector>
 class affairs
 {
     public:
         affairs();
-        //拥有该事务的学生名单
+        //拥有该事务的学生名单。
         Vector<int> student;
         //事务类型，0为课程，1为活动，2为临时事务,3为已删除。
-        int kind; 
-        //事务名称
+        int kind;
+        //事务名称。
         std::string name;
         //事务周，二进制表示，共16位。
         bool week[17];
@@ -26,7 +27,7 @@ class affairs
         int start_time;
         //事务结束时间，0-23。
         int end_time;
-        //事务地点,如果是线上则为网址（www开头）。
+        //事务地点,如果是线上则为网址（www开头)。
         std::string location;
         //考试时间
         std::string exam_time;

@@ -27,6 +27,7 @@ public:
                 node->next[c + 128] = new TrieNode();
             }
             node = node->next[c + 128];
+            node->is_end.push_back(id);
         }
         node->is_end.push_back(id);
     }

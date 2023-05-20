@@ -57,7 +57,7 @@ bool Schedule::add_affairs(int a){
             }
             for(int i=1;i<=16;i++){
                 if(tmpaffairs.week[i]){
-                    for(int j=0;j<=23;j++){
+                    for(int j=6;j<=22;j++){
                         for(int k=0;k<tmpaffairs.student.getSize();k++){
                             if(all_list[tmpaffairs.student[k]].timetable[i][tmpaffairs.day][j].size()!=0&&all_list[tmpaffairs.student[k]].timetable[i][tmpaffairs.day][j][0]<1){
                                 all_timetable[j]++;
@@ -67,7 +67,7 @@ bool Schedule::add_affairs(int a){
                 }
             }
             int minx=114514,x=0;
-            for(int i=0;i<=23;i++){
+            for(int i=6;i<=22;i++){
                 if(all_timetable[i]<minx){
                     minx=all_timetable[i];
                     x=i;
@@ -102,7 +102,7 @@ bool mylist::delete_affairs(int a){
     affairs tmpaffairs=Affairslist.list[a];
     //更新时间表
     for(int i=1;i<=16;i++){
-        for(int j=tmpaffairs.start_time;j<tmpaffairs.end_time;i++){
+        for(int j=tmpaffairs.start_time;j<tmpaffairs.end_time;j++){
             if(tmpaffairs.week[i]){
                 timetable[i][tmpaffairs.day][j].clear();
             }

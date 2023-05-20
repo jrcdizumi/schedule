@@ -1,4 +1,5 @@
 #include "affairslist.h"
+#include <QDebug>
 affairs::affairs()
 {
     kind=-1;
@@ -27,7 +28,7 @@ affairslist::affairslist()
 {
     Json::Reader reader;
     Json::Value root;
-    string loc=".\\data\\affairslist.json";
+    string loc="../schedule/data/affairslist.json";
     ifstream in(loc,ios::binary);
     if(!in.is_open()){
         cout<<"error opening file\n";
@@ -53,6 +54,7 @@ affairslist::affairslist()
                 }
             list.push_back(thisaffair);
             serach_trie.insert(thisaffair.name,i);
+
         }
     }
 };
@@ -82,7 +84,7 @@ affairslist::~affairslist()
         root.append(thisaffair);
     }
     Json::StyledWriter writer;
-    string loc=".\\data\\affairslist.json";
+    string loc="../schedule/data/affairslist.json";
     ofstream out(loc,ios::binary);
     out<<writer.write(root);
     out.close();
@@ -92,10 +94,9 @@ Vector<affairs> affairslist::search_affairs(std::string name,int student_id,int 
     Vector<affairs> result;
     Vector<int> ans=serach_trie.search(name);
     for(int i=0;i<ans.getSize();i++){
-        for(int i=0;i<list[ans[i]].student.getSize();i++){
-            if(list[ans[i]].student[i]==student_id&&list[ans[i]].kind==kind){
-                result.push_back(list[ans[i]]);
-                break;
+        for(int j=0;j<list[ans[i]].student.getSize();j++){
+            if(list[ans[i]].student[j]==student_id&&list[ans[i]].kind==kind){
+                    result.push_back(list[ans[i]]);
             }
         }
     }

@@ -1,21 +1,75 @@
+// MainWindow.h
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPushButton>
+#include "ui_MainWindow.h"
+#include "searchwindow.h"
+#include "QSpinBox"
+#include "add_class.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+class QTableWidget; // 前向声明
+
+namespace Ui {
+class MainWindow;
+}
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void resizeEvent(QResizeEvent *event) override
+    {
+        QWidget::resizeEvent(event);
+        m_tableWidget->horizontalHeader()->setDefaultSectionSize(this->m_tableWidget->width()/9);
+        m_tableWidget->verticalHeader()->setDefaultSectionSize(this->m_tableWidget->height()/16.4);
+        pushButton->setGeometry(width()-width()/8, height()/40, width()/10, height()/30);
+        pushButton_2->setGeometry(width()-width()/8, height()/10, width()/10, height()/30);
+        pushButton_3->setGeometry(width()-width()/8, height()/7, width()/10, height()/30);
+        pushButton_4->setGeometry(width()-width()/8, height()/4, width()/10, height()/30);
+        pushButton_5->setGeometry(width()-width()/8, height()/3, width()/10, height()/30);
+        pushButton_6->setGeometry(width()-width()/8, height()/2, width()/10, height()/30);
+        pushButton_7->setGeometry(width()-width()/8, height()/1.3, width()/10, height()/30);
+        spinbox_1->setGeometry(width()-width()/8, height()/1.5, width()/10, height()/30);
+    }
+    int week_on_screen;
+
+signals:
+    void ExitWin();//新建一个信号槽
+
+private slots:
+    void on_m_tableWidget_cellClicked(int row, int column);
+    void reloadTable();
+    void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
+    void on_pushButton_3_clicked();
+    void on_pushButton_4_clicked();
+    void on_pushButton_5_clicked();
+    void on_pushButton_6_clicked();
+    void on_pushButton_7_clicked();
+    void closeEvent(QCloseEvent *event);
+    void on_spinbox_value_changed(int value);
+    void week_changed();
 
 private:
     Ui::MainWindow *ui;
+    QTableWidget *m_tableWidget;
+    QPushButton *pushButton;
+    QPushButton *pushButton_2;
+    QPushButton *pushButton_3;
+    QPushButton *pushButton_4;
+    QPushButton *pushButton_5;
+    QPushButton *pushButton_6;
+    QPushButton *pushButton_7;
+    QSpinBox *spinbox_1;
+    course_info *ci;
+    SearchWindow *sw;
+    add_class *ac;
 };
+
 #endif // MAINWINDOW_H
