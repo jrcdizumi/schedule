@@ -13,10 +13,13 @@
 #include <QTextStream>
 #include <QStringList>
 #include "src/clock.h"
+#include "src/log.h"
 #define number 100
 Clock *userclock;
+Log* myLog;
 node A;
-int i=0;
+extern bool is_admin;
+extern int now_user;
 using namespace std;
 HashMap<string>* student=new HashMap<string>(number);
 HashMap<string>* administrator=new HashMap<string>(number);
@@ -31,7 +34,7 @@ login::login(QWidget *parent) :
     A.hour=10;
     A.num=10086;
     ui->password->setEchoMode(QLineEdit::Password);
-    userclock=new Clock();
+    userclock=new Clock("1");
     if(!initialize())
     {
          qDebug()<<"初始化错误";
@@ -77,11 +80,16 @@ void login::on_pushButton_clicked()
                }
 */
                if(Strie.search(s1)==s2)
-               {
-                newwindow=new MainWindow();
-                 connect(newwindow,SIGNAL(ExitWin()),this,SLOT(show()));
-                connect(this,SIGNAL(sendData(HashMap<string>*)),newwindow,SLOT(getData(HashMap<string>*)));
+               {            
                 emit sendData(student);
+                myLog=new Log(QString::fromStdString(s1),userclock);//创建对象
+                delete userclock;
+                userclock=new Clock(ui->username->text());
+                now_user=Strie.search_id(s1);
+                newwindow=new MainWindow();
+                connect(newwindow,SIGNAL(ExitWin()),this,SLOT(show()));
+                connect(this,SIGNAL(sendData(HashMap<string>*)),newwindow,SLOT(getData(HashMap<string>*)));
+                is_admin=0;
                 newwindow->show();
                 this->hide();
                }
@@ -104,11 +112,12 @@ void login::on_pushButton_clicked()
            {
                if(Atrie.search(s1)==s2)
                {
-                   newwindow=new MainWindow();
-                   connect(newwindow,SIGNAL(ExitWin()),this,SLOT(show()));
-                   connect(this,SIGNAL(sendData(HashMap<string>*)),newwindow,SLOT(getData(HashMap<string>*)));
+                   newadmin=new admin();
+                   connect(newadmin,SIGNAL(ExitWin()),this,SLOT(show()));
+                   connect(this,SIGNAL(sendData(HashMap<string>*)),newadmin,SLOT(getData(HashMap<string>*)));
+                   is_admin=1;
                    emit sendData(administrator);
-                   newwindow->show();
+                   newadmin->show();
                    this->hide();
                }
                else
@@ -125,16 +134,11 @@ void login::on_pushButton_clicked()
            QMessageBox::warning(this,tr("wrong"),tr("请选择身份"),QMessageBox::Ok);
        }
 }
-
-void login::timerEvent(QTimerEvent *event)
-{
-       if(event->timerId()==time_id)
-      qDebug() << i++;
-}
 bool login::initialize(void)
 {
        QFile newfile("../schedule/data/user.bin");
        //处理学生账号密码
+       tot_id=1;
        if (newfile.open(QIODevice::ReadOnly)) {
            QTextStream stream(&newfile);
            while (!stream.atEnd()) {
@@ -144,7 +148,7 @@ bool login::initialize(void)
             QString password = parts[1];
             // 处理账号和密码
             qDebug()<<account<<" "<<password;
-            Strie.insert(account.toStdString(),password.toStdString());
+            Strie.insert(account.toStdString(),password.toStdString(),tot_id++);
            }
            newfile.close();
         }
@@ -161,7 +165,7 @@ bool login::initialize(void)
             QString password = parts[1];
             // 处理账号和密码
             qDebug()<<account<<" "<<password;
-            Atrie.insert(account.toStdString(),password.toStdString());
+            Atrie.insert(account.toStdString(),password.toStdString(),0);
            }
            newfile.close();
         }
@@ -223,9 +227,10 @@ void login::on_pushButton_2_clicked()
            qDebug()<<"删除signup成功";
     }
     signup=new registered();
+    signup->tot_id=tot_id++;
     connect(signup,SIGNAL(ExitWin()),this,SLOT(show()));
     connect(this,SIGNAL(sendData2(UserTrie*)),signup,SLOT(getData(UserTrie*)));
-    emit sendData2(&this->Strie);
+    emit sendData2(&Strie);
     this->hide();
     signup->show();
 }

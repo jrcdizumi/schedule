@@ -32,8 +32,10 @@ MainWindow::MainWindow(QWidget *parent)
     reloadTable();
     m_tableWidget->resizeColumnsToContents();
     connect(m_tableWidget, &QTableWidget::cellClicked, this, &MainWindow::on_m_tableWidget_cellClicked);
-    pushButton = new QPushButton("Search", this);
+    pushButton = new QPushButton("Search(name)", this);
     connect(pushButton, &QPushButton::clicked, this, &MainWindow::on_pushButton_clicked);
+    pushButton_9 = new QPushButton("Search(time)", this);
+    connect(pushButton_9, &QPushButton::clicked, this, &MainWindow::on_pushButton_9_clicked);
     pushButton_2 = new QPushButton("NAV", this);
     connect(pushButton_2, &QPushButton::clicked, this, &MainWindow::on_pushButton_2_clicked);
     pushButton_3 = new QPushButton("Add", this);
@@ -46,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(pushButton_6, &QPushButton::clicked, this, &MainWindow::on_pushButton_6_clicked);
     pushButton_7 = new QPushButton("Upd_Week", this);
     connect(pushButton_7, &QPushButton::clicked, this, &MainWindow::on_pushButton_7_clicked);
+    pushButton_8 = new QPushButton("Time_speeddown", this);
+    connect(pushButton_8, &QPushButton::clicked, this, &MainWindow::on_pushButton_8_clicked);
     spinbox_1=new QSpinBox(this);
     spinbox_1->setRange(1, 16); // 设置最小值和最大值
     spinbox_1->setSingleStep(1);
@@ -63,13 +67,25 @@ MainWindow::~MainWindow()
 void MainWindow::on_m_tableWidget_cellClicked(int row, int column)
 {
     QTableWidgetItem *item = m_tableWidget->item(row, column);
-    if (item) {
+    if (item->text()!=" ") {
         if(ci==nullptr){
             ci=new course_info();
         }
         else{
             delete ci;
             ci=new course_info();
+        }
+        ci->set_affair(schedule.all_list[now_user].timetable[week_on_screen][column+1][row+6][0]);
+        if(Affairslist.list[schedule.all_list[now_user].timetable[week_on_screen][column+1][row+6][0]].kind==2){
+            QString qstr="",qstr2="";
+            for(int i=0;i<schedule.all_list[now_user].timetable[week_on_screen][column+1][row+6].size();i++){
+                qstr+=QString::fromStdString(Affairslist.list[schedule.all_list[now_user].timetable[week_on_screen][column+1][row+6][i]].name);
+                qstr2+=QString::fromStdString(Affairslist.list[schedule.all_list[now_user].timetable[week_on_screen][column+1][row+6][i]].location);
+                qstr+=" ";
+                qstr2+=" ";
+            }
+            ci->setName(qstr);
+            ci->setLocation(qstr2);
         }
         ci->show();
     }
@@ -85,7 +101,7 @@ void MainWindow::reloadTable()
             m_tableWidget->setItem(row, column, item);
         }
         else{
-            QTableWidgetItem *item = new QTableWidgetItem(QString("无"));
+            QTableWidgetItem *item = new QTableWidgetItem(QString(" "));
             item->setTextAlignment(Qt::AlignCenter);
             item->setFlags(item->flags() ^ Qt::ItemIsEditable);
             m_tableWidget->setItem(row, column, item);
@@ -105,21 +121,38 @@ void MainWindow::on_pushButton_clicked()
     }
     sw->show();
 }
+void MainWindow::on_pushButton_9_clicked()
+{
+    if(sw2==nullptr){
+        sw2=new SearchWindow2();
+    }
+    else{
+        delete sw2;
+        sw2=new SearchWindow2();
+    }
+    sw2->show();
+}
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    if(ci==nullptr){
-        ci=new course_info();
+    if(qg==nullptr){
+        qg=new Qguide();
     }
     else{
-        delete ci;
-        ci=new course_info();
+        delete qg;
+        qg=new Qguide();
     }
-    ci->show();
+    qg->show();
 }
 void MainWindow::on_pushButton_3_clicked()
 {
-    ac=new add_class();
+    if(ac==nullptr){
+        ac=new add_class();
+    }
+    else{
+        delete ac;
+        ac=new add_class();
+    }
     ac->show();
 }
 void MainWindow::on_pushButton_4_clicked()
@@ -139,6 +172,10 @@ void MainWindow::on_pushButton_7_clicked()
     week_on_screen=spinbox_1->value();
     reloadTable();
 }
+void MainWindow::on_pushButton_8_clicked()
+{
+    userclock->setSpeed(userclock->m_speed-1);
+}
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     event->accept();
@@ -147,6 +184,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
     userclock->myclock->close();
     userclock->pause();
     userclock->saveTime();
+    if(ci!=nullptr)delete ci;
+    if(sw!=nullptr)delete sw;
+    if(ac!=nullptr)delete ac;
     this->deleteLater();
 }
 void MainWindow::on_spinbox_value_changed(int value){

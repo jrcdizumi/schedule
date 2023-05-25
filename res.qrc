@@ -3,5 +3,9 @@
         <file>data/user.txt</file>
         <file>data/background.jpg</file>
         <file>data/th.jpg</file>
+        <file>data/map.jpg</file>
+        <file>data/edge.in</file>
+        <file>data/id.in</file>
+        <file>data/map.in</file>
     </qresource>
 </RCC>

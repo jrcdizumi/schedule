@@ -11,9 +11,10 @@ mylist::mylist(){
 bool mylist::add_affairs(int a){
     //判断是否冲突
     affairs tmpaffairs=Affairslist.list[a];
+    if(tmpaffairs.kind==3)return false;
     for(int i=1;i<=16;i++){
         for(int j=tmpaffairs.start_time;j<tmpaffairs.end_time;j++){
-            if(timetable[i][tmpaffairs.day][j].size()!=0&&tmpaffairs.week[i]&&(Affairslist.list[timetable[i][tmpaffairs.day][j][0]].kind<=tmpaffairs.kind||(tmpaffairs.kind==2&&Affairslist.list[timetable[i][tmpaffairs.day][j][0]].kind<tmpaffairs.kind))){
+            if(timetable[i][tmpaffairs.day][j].size()!=0&&tmpaffairs.week[i]&&((tmpaffairs.kind!=2&&Affairslist.list[timetable[i][tmpaffairs.day][j][0]].kind<=tmpaffairs.kind)||(tmpaffairs.kind==2&&Affairslist.list[timetable[i][tmpaffairs.day][j][0]].kind<tmpaffairs.kind))){
                 return false;
             }
         }
@@ -39,10 +40,11 @@ bool mylist::add_affairs(int a){
 bool Schedule::add_affairs(int a){
     bool flag=1;
     affairs tmpaffairs=Affairslist.list[a];
+    if(tmpaffairs.kind==3)return false;
     for(int i=0;i<tmpaffairs.student.getSize();i++){
         for(int j=1;j<=16;j++){
             for(int k=tmpaffairs.start_time;k<tmpaffairs.end_time;k++){
-                if(all_list[tmpaffairs.student[i]].timetable[j][tmpaffairs.day][k].size()!=0&&tmpaffairs.week[j]&&(tmpaffairs.kind>=Affairslist.list[all_list[tmpaffairs.student[i]].timetable[j][tmpaffairs.day][k][0]].kind||(tmpaffairs.kind==2&&Affairslist.list[all_list[tmpaffairs.student[i]].timetable[j][tmpaffairs.day][k][0]].kind<tmpaffairs.kind))){
+                if(all_list[tmpaffairs.student[i]].timetable[j][tmpaffairs.day][k].size()!=0&&tmpaffairs.week[j]&&((tmpaffairs.kind!=2&&tmpaffairs.kind>=Affairslist.list[all_list[tmpaffairs.student[i]].timetable[j][tmpaffairs.day][k][0]].kind)||(tmpaffairs.kind==2&&Affairslist.list[all_list[tmpaffairs.student[i]].timetable[j][tmpaffairs.day][k][0]].kind<tmpaffairs.kind))){
                     flag=0;
                     break;
                 }
@@ -59,7 +61,7 @@ bool Schedule::add_affairs(int a){
                 if(tmpaffairs.week[i]){
                     for(int j=6;j<=22;j++){
                         for(int k=0;k<tmpaffairs.student.getSize();k++){
-                            if(all_list[tmpaffairs.student[k]].timetable[i][tmpaffairs.day][j].size()!=0&&all_list[tmpaffairs.student[k]].timetable[i][tmpaffairs.day][j][0]<1){
+                            if(all_list[tmpaffairs.student[k]].timetable[i][tmpaffairs.day][j].size()!=0&&Affairslist.list[all_list[tmpaffairs.student[k]].timetable[i][tmpaffairs.day][j][0]].kind<=1){
                                 all_timetable[j]++;
                             }
                         }
@@ -67,24 +69,26 @@ bool Schedule::add_affairs(int a){
                 }
             }
             int minx=114514,x=0;
-            for(int i=6;i<=22;i++){
+            for(int i=6;i<22;i++){
                 if(all_timetable[i]<minx){
                     minx=all_timetable[i];
                     x=i;
                 }
             }
-            tmpaffairs.start_time=x;
-            tmpaffairs.end_time=x+1;
+            if(x==0)return false;
+            Affairslist.list[a].start_time=x;
+            Affairslist.list[a].end_time=x+1;
             Vector<int> new_student_id;
             for(int i=0;i<tmpaffairs.student.getSize();i++){
                 if(all_list[tmpaffairs.student[i]].add_affairs(a)){
                     new_student_id.push_back(tmpaffairs.student[i]);
                 }
             }
-            tmpaffairs.student=new_student_id;
+            Affairslist.list[a].student=new_student_id;
             if(new_student_id.getSize()==0){
                 return false;
             }
+            return true;
         }
         else{
             return false;
@@ -115,9 +119,43 @@ bool Schedule::delete_affairs(int a){
     for(int i=0;i<tmpaffairs.student.getSize();i++){
         all_list[tmpaffairs.student[i]].delete_affairs(a);
     }
-    Affairslist.list[a].kind=3;
     return true;
 }
+Vector<int> mylist::search_affairs(int week,int day,int start_time,int end_time,int kind){
+    Vector<int> result;
+    for(int i=start_time;i<end_time;i++){
+        for(int j=0;j<timetable[week][day][i].size();i++){
+            if(Affairslist.list[timetable[week][day][i][j]].kind==kind)result.push_back(timetable[week][day][i][j]);
+        }
+    }
+    qSort(result,0,result.getSize()-1);
+    return result;
+
+}
+void mylist::qSort(Vector<int>& arr, int left, int right) {
+    if (left < right) {
+        int pivot = arr[(left + right) / 2];
+        int i = left - 1;
+        int j = right + 1;
+        while (true) {
+            do {
+                i++;
+            } while (Affairslist.list[arr[i]].name < Affairslist.list[pivot].name);
+            do {
+                j--;
+            } while (Affairslist.list[arr[j]].name > Affairslist.list[pivot].name);
+            if (i >= j) {
+                break;
+            }
+            int tmp=arr[i];
+            arr[i]=arr[j];
+            arr[j]=tmp;
+        }
+        qSort(arr, left, j);
+        qSort(arr, j + 1, right);
+    }
+}
+
 Schedule::Schedule(){
 
 }

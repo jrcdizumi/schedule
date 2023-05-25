@@ -12,12 +12,16 @@ public:
     Vector();
     Vector(int capacity);
     Vector(const Vector<T>& other);
+    Vector(int capacity, const T& initial);
     ~Vector();
 
     void push_back(const T& element);
     void pop_back();
     void clear();
+    void resize(int newSize);
 
+    T front();
+    T back();
     T& operator[](int index);
     const T& operator[](int index) const;
 
@@ -27,6 +31,14 @@ public:
     Vector<T>& operator=(const Vector<T>& other);
 };
 
+template <typename T>
+T Vector<T>::front(){
+    return data[0];
+}
+template <typename T>
+T Vector<T>::back(){
+    return data[size-1];
+}
 template <typename T>
 Vector<T>::Vector() {
     data = nullptr;
@@ -48,6 +60,16 @@ Vector<T>::Vector(const Vector<T>& other) {
     capacity = other.capacity;
     for (int i = 0; i < size; i++) {
         data[i] = other.data[i];
+    }
+}
+
+template <typename T>
+Vector<T>::Vector(int capacity, const T& initial) {
+    data = new T[capacity];
+    size = capacity;
+    this->capacity = capacity;
+    for (int i = 0; i < size; i++) {
+        data[i] = initial;
     }
 }
 
@@ -80,6 +102,20 @@ void Vector<T>::pop_back() {
 template <typename T>
 void Vector<T>::clear() {
     size = 0;
+}
+template <typename T>
+void Vector<T>::resize(int newSize) {
+    if (newSize > capacity) {
+        capacity = newSize;
+        T* newData = new T[capacity];
+        for (int i = 0; i < size; i++) {
+            newData[i] = data[i];
+        }
+        delete[] data;
+        data = newData;
+    }
+    size = newSize;
+    return;
 }
 
 template <typename T>

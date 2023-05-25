@@ -4,7 +4,6 @@
 #include <string>
 #include <iostream>
 #include "../func/vector.h"
-#include "../func/hashmap.h"
 #include "../func/json/json.h"
 #include <fstream>
 #include "../func/trie.h"
@@ -44,10 +43,8 @@ class affairslist
         Trie serach_trie;
         affairslist();
         ~affairslist();
-        Vector<affairs> search_affairs(std::string name,int student_id,int kind);
+        Vector<int> search_affairs(std::string name,int student_id,int kind);
         //添加事务
-        void add_affairs(int kind, std::string name, int day,int start_time, int end_time, std::string location, std::string exam_time, std::string exam_location,int week[17],Vector<int> student);
-        //更新事务
-        bool update_affairs(int a,int nowweek);
+        int add_affairs(int kind, std::string name, int day,int start_time, int end_time, std::string location, std::string exam_time, std::string exam_location,bool week[17],Vector<int> student);
 };
 #endif // AFFAIRSLIST_H

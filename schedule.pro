@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     add_class.cpp \
+    admin.cpp \
     main.cpp \
     mainwindow.cpp \
     course_info.cpp \
@@ -18,21 +19,25 @@ SOURCES += \
     registered.cpp \
     reminder.cpp \
     searchwindow.cpp \
+    searchwindow2.cpp \
     func/jsoncpp.cpp \
     src/affairslist.cpp \
     src/schedule.cpp \
     src/clock.cpp \
-    src/log.cpp
-
+    Qguide.cpp \
+    src/log.cpp \
+    $$files("guide/*.cpp",true)
 
 HEADERS += \
     add_class.h \
+    admin.h \
     mainwindow.h \
     course_info.h \
     messagebox.h \
     registered.h \
     reminder.h \
     searchwindow.h \
+    searchwindow2.h \
     login.h \
     func/json/json.h \
     func/json/json-forwards.h \
@@ -45,17 +50,22 @@ HEADERS += \
     func/trie.h \
     src/clock.h \
     func/mysort.h \
+    func/queue.h \
+    Qguide.h \
     src/log.h
 
 FORMS += \
     add_class.ui \
+    admin.ui \
     mainwindow.ui \
     course_info.ui \
     login.ui \
     messagebox.ui \
     registered.ui \
     reminder.ui \
-    searchwindow.ui
+    searchwindow.ui \
+    qguide.ui \
+    searchwindow2.ui
 
 
 # Default rules for deployment.

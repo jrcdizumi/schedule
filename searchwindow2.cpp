@@ -1,23 +1,24 @@
-#include "searchwindow.h"
+#include "searchwindow2.h"
 #include "qcombobox.h"
-#include "ui_searchwindow.h"
+#include "ui_searchwindow2.h"
 #include <QStandardItemModel>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
 #include "src/affairslist.h"
 extern affairslist Affairslist;
+extern Schedule schedule;
 extern int now_user;
-SearchWindow::SearchWindow(QWidget *parent) :
+SearchWindow2::SearchWindow2(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::SearchWindow)
+    ui(new Ui::SearchWindow2)
 {
     ui->setupUi(this);
     // 初始化数组
-    comboBox->addItem("课程");
+   comboBox->addItem("课程");
    comboBox->addItem("活动");
-    comboBox->addItem("临时事务");
-   this->ui->horizontalLayout->insertWidget(1,comboBox);
-     m_fruits << "Apple" << "Banana" << "Cherry" << "Durian" << "Elderberry" << "Fig" << "Grape"<<"ddd"<<"dadd"<<"a"<<"aahkjds"<<"dasnjdk";
+   comboBox->addItem("临时事务");
+   this->ui->horizontalLayout->insertWidget(8,comboBox);
+    m_fruits << "Apple" << "Banana" << "Cherry" << "Durian" << "Elderberry" << "Fig" << "Grape"<<"ddd"<<"dadd"<<"a"<<"aahkjds"<<"dasnjdk";
     m_model = new QStandardItemModel(0,0,this);
     ui->tableView->setModel(m_model);
     connect(ui->tableView, &QTableView::clicked, this, [this](const QModelIndex &index)
@@ -44,16 +45,14 @@ SearchWindow::SearchWindow(QWidget *parent) :
             });
     connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index){
         qDebug() << "当前选定的索引为：" << index;
-        if(this->ui->lineEdit->text()!="")
-            this->on_searchButton_clicked();
     });
 }
 
-SearchWindow::~SearchWindow()
+SearchWindow2::~SearchWindow2()
 {
     delete ui;
 }
-void SearchWindow::change(QString s,QString t)
+void SearchWindow2::change(QString s,QString t)
 {
     int len=this->m_fruits.size();
     for(int i=0;i<len;i++)
@@ -64,13 +63,16 @@ void SearchWindow::change(QString s,QString t)
         }
     }
 }
-void SearchWindow::on_searchButton_clicked()
+void SearchWindow2::on_searchButton_clicked()
 {
     int skind=this->comboBox->currentIndex();
     qDebug()<<skind;
-    QString keyword = ui->lineEdit->text();
-    int num=0;
-    a=Affairslist.search_affairs(keyword.toStdString(),now_user,skind);
+    int num=0,week=0,day=0,start_time=0,end_time=0;
+    week=ui->spinBox->value();
+    day=ui->spinBox_4->value();
+    start_time=ui->spinBox_3->value();
+    end_time=ui->spinBox_2->value();
+    a=schedule.all_list[now_user].search_affairs(week,day,start_time,end_time,skind);
     for(int i=0;i<a.getSize();i++)
     {
         QString qstr = QString::fromStdString(Affairslist.list[a[i]].name);
@@ -97,14 +99,20 @@ void SearchWindow::on_searchButton_clicked()
     ui->tableView->setModel(m_model);
 
 }
-
-void SearchWindow::on_lineEdit_returnPressed()
-{
-    SearchWindow::on_searchButton_clicked();
-}
-void SearchWindow::closeEvent(QCloseEvent *event)
+void SearchWindow2::closeEvent(QCloseEvent *event)
 {
     event->accept();
 }
 
+
+
+void SearchWindow2::on_spinBox_3_valueChanged(int arg1)
+{
+    if(ui->spinBox_2->value()<=arg1)ui->spinBox_2->setValue(arg1+1);
+}
+
+void SearchWindow2::on_spinBox_2_valueChanged(int arg1)
+{
+    if(ui->spinBox_3->value()>=arg1)ui->spinBox_3->setValue(arg1-1);
+}
 

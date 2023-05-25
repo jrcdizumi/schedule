@@ -11,6 +11,7 @@ public:
     UserTrieNode* children[10];
     bool is_end_of_word;
     string password;
+    int id;
 
     UserTrieNode() {
         for (int i = 0; i < 10; i++) {
@@ -18,6 +19,7 @@ public:
         }
         is_end_of_word = false;
         password = "";
+        id=0;
     }
 };
 
@@ -29,7 +31,7 @@ public:
         root = new UserTrieNode();
     }
 
-    void insert(string word, string password) {
+    void insert(string word, string password,int id) {
         UserTrieNode* current = root;
         for (char c : word) {
             if (!isdigit(c)) {
@@ -45,6 +47,7 @@ public:
         }
         current->is_end_of_word = true;
         current->password = password;
+        current->id=id;
     }
 
     string search(string word) {
@@ -65,6 +68,25 @@ public:
             return current->password;
         }
         return "";
+    }
+    int search_id(string word) {
+        UserTrieNode* current = root;
+        for (char c : word) {
+            if (!isdigit(c)) {
+                cout << "Error: student ID should only contain digits." << endl;
+                return 0;
+            }
+
+            int num = c - '0';
+            if (current->children[num] == nullptr) {
+                return 0;
+            }
+            current = current->children[num];
+        }
+        if (current->is_end_of_word) {
+            return current->id;
+        }
+        return 0;
     }
 };
 

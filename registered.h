@@ -13,9 +13,9 @@ class registered : public QWidget
     Q_OBJECT
 
 public:
-      int test=111;
     explicit registered(QWidget *parent = nullptr);
     ~registered();
+    int tot_id;
 
 signals:
     void ExitWin();//新建一个信号槽

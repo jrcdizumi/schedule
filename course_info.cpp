@@ -42,12 +42,44 @@ void course_info::setExamLocation(const QString &location)
     ui->Exam_Location->setText(location);
 }
 
+void course_info::set_affair(int a){
+    affairs b=Affairslist.list[a];
+    thisaffair=a;
+    //qDebug()<<QString::fromStdString(b.name)<<" "<<QString::number(b.day);
+    setName(QString::fromStdString(b.name));
+    if(b.kind==0)setTeacher("课程");
+    else if(b.kind==1)setTeacher("活动");
+    else if(b.kind==2)setTeacher("临时事务");
+    setClassTime("周"+QString::number(b.day)+"第"+QString::number(b.start_time)+"节到"+QString::number(b.end_time)+"节");
+    setExamTime(QString::fromStdString(b.exam_time));
+    setLocation(QString::fromStdString(b.exam_location));
+    setExamLocation(QString::fromStdString(b.exam_location));
+    if(b.exam_time!=""){
+        getButton()->setCheckable(true);
+        getButton()->setChecked(true);
+    }
+    else{
+        getButton()->setCheckable(true);
+        getButton()->setChecked(false);
+    }
+    if(b.kind==0){
+        getButton()->setCheckable(true);
+        getButton()->setChecked(true);
+        getButton()->setEnabled(false);
+    }
+}
 
 void course_info::on_ok_button_clicked()
 {
-    this->close();
-    reminder* AAA=new reminder();
-    AAA->show();
+
+    if(qg==nullptr){
+        qg=new Qguide();
+    }
+    else{
+        delete qg;
+        qg=new Qguide();
+    }
+    qg->show();
 }
 
 void course_info::on_cancel_button_clicked()
@@ -57,13 +89,11 @@ void course_info::on_cancel_button_clicked()
 
 void course_info::on_radioButton_clicked()
 {
-    if(this->ui->radioButton->isChecked())
-    {
-        qDebug()<<"成功设置闹钟";
+    if(this->ui->radioButton->isChecked()){
+        if(Affairslist.list[thisaffair].exam_time=="")Affairslist.list[thisaffair].exam_time=" ";
     }
-    else
-    {
-
+    else{
+        Affairslist.list[thisaffair].exam_time="";
     }
 }
 QRadioButton* course_info::getButton()
@@ -73,3 +103,9 @@ QRadioButton* course_info::getButton()
 void course_info::closeEvent(QCloseEvent *event){
     event->accept();
 }
+
+void course_info::on_ok_button_2_clicked()
+{
+
+}
+

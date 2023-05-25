@@ -11,7 +11,7 @@ class Clock : public QObject
     Q_OBJECT
 
 public:
-    explicit Clock(QObject *parent = nullptr);
+    explicit Clock(QString student_id,QObject *parent = nullptr);
     void start();
     void pause();
     void setSpeed(int speed);
@@ -25,6 +25,7 @@ public:
     int m_speed;
     messagebox* myclock;
     bool isBoxshow=0;
+    int m_state=2;//0,暂停 1，暂停后重新开始 2，正常计时
 
 signals:
     void timeChanged(QTime time);
@@ -39,8 +40,8 @@ private:
     int m_hour;
     int m_week;
     bool m_paused;
-    int m_state=2;//0,暂停 1，暂停后重新开始 2，正常计时
     int m_remainingTime;
+    QString student_id;
 };
 
 #endif // CLOCK_H

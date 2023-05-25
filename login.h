@@ -7,6 +7,9 @@
 #include <QTimerEvent>
 #include <QTimer>
 #include "mainwindow.h"
+#include "admin.h"
+extern UserTrie Strie;
+
 struct node
 {
     int num;
@@ -29,9 +32,7 @@ public:
     explicit login(QWidget *parent = nullptr);
     ~login();
     bool initialize(void);
-    void timerEvent(QTimerEvent *event);
     int time_id;
-    UserTrie Strie;
     UserTrie Atrie;
 protected:
     //拖拽窗口
@@ -53,11 +54,12 @@ private slots:
 private:
     Ui::login *ui;
     MainWindow *newwindow;
+    admin *newadmin;
     registered* signup=NULL;//=new registered();
     bool        m_bDrag;
     QPoint      mouseStartPoint;
     QPoint      windowTopLeftPoint;
-
+    int tot_id;
 
 };
 

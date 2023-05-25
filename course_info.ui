@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Course Name:</string>
+    <string>Name:</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -39,7 +39,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Teacher:</string>
+    <string>Kind:</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -55,7 +55,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Class Time:</string>
+    <string>Time:</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -149,20 +149,20 @@
   <widget class="QPushButton" name="ok_button">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>30</x>
      <y>230</y>
      <width>75</width>
      <height>24</height>
     </rect>
    </property>
    <property name="text">
-    <string>OK</string>
+    <string>导航</string>
    </property>
   </widget>
   <widget class="QPushButton" name="cancel_button">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>270</x>
      <y>230</y>
      <width>75</width>
      <height>24</height>
@@ -209,6 +209,19 @@
    </property>
    <property name="text">
     <string>闹钟提醒</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ok_button_2">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>230</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>修改</string>
    </property>
   </widget>
  </widget>

@@ -82,7 +82,7 @@ void registered::on_signup_clicked()
 
                              QTextStream out(&file);
                               out<<'\n'<<ui->username->text()<<" "<<ui->password->text();
-                            userdata->insert(userName,passWord);
+                            userdata->insert(userName,passWord,tot_id);
                             QMessageBox::warning(this,tr("注册成功"),tr("成功注册"),QMessageBox::Ok);
                             this->close();
                             ui->password->clear();

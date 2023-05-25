@@ -89,35 +89,26 @@ affairslist::~affairslist()
     out<<writer.write(root);
     out.close();
 };
-Vector<affairs> affairslist::search_affairs(std::string name,int student_id,int kind)
+Vector<int> affairslist::search_affairs(std::string name,int student_id,int kind)
 {
-    Vector<affairs> result;
+    Vector<int> result;
     Vector<int> ans=serach_trie.search(name);
     for(int i=0;i<ans.getSize();i++){
         for(int j=0;j<list[ans[i]].student.getSize();j++){
             if(list[ans[i]].student[j]==student_id&&list[ans[i]].kind==kind){
-                    result.push_back(list[ans[i]]);
+                    result.push_back(ans[i]);
             }
         }
     }
     return result;
 }
-void affairslist::add_affairs(int kind, std::string name, int day,int start_time, int end_time, std::string location, std::string exam_time, std::string exam_location, int week[17], Vector<int> student)
+int affairslist::add_affairs(int kind, std::string name, int day,int start_time, int end_time, std::string location, std::string exam_time, std::string exam_location, bool week[17], Vector<int> student)
 {
     affairs thisaffair(kind,name,day,start_time,end_time,location,exam_time,exam_location);
     for(int i=0;i<17;i++)thisaffair.week[i]=week[i];
     thisaffair.student=student;
     list.push_back(thisaffair);
     serach_trie.insert(name,list.getSize()-1);
-}
-bool affairslist::update_affairs(int a,int nowweek){
-    affairs tmpaffairs=list[a];
-    for(int i=nowweek+1;i<=16;i++){
-        if(tmpaffairs.week[i]){
-            return 0;
-        }
-    }
-    list[a].kind=3;
-    return 1;
+    return list.getSize()-1;
 }
 affairslist Affairslist;

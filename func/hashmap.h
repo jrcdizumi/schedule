@@ -21,17 +21,18 @@ public:
 
 template <typename T>
 class HashMap {
+    typedef unsigned int uint;
 private:
     HashNode<T>** table;
-    int capacity;
-
+    uint capacity;
+    uint p = 31;
 public:
     //初始化哈希表
-    HashMap(int capacity);
+    HashMap(uint capacity = 200,uint prime=31);
     //析构函数
     ~HashMap();
     //返回key的hash值
-    int hash(std::string key);
+    uint hash(std::string key);
     //插入key-value
     void insert(std::string key, T value);
     //返回key对应的value
@@ -42,12 +43,26 @@ public:
     void update(std::string key, T value);
     //打印哈希表
     void print();
+
+    bool inhash(std::string key);
 };
 
+template <typename T>
+bool HashMap<T>::inhash(std::string key){
+    uint index = hash(key);
+    HashNode<T>* node = table[index];
+    while (node != nullptr) {
+        if (node->key == key) {
+            return true;
+        }
+        node = node->next;
+    }
+    return false;
+}
 // Constructor
 template <typename T>
-HashMap<T>::HashMap(int capacity) {
-    this->capacity = capacity;
+HashMap<T>::HashMap(uint capacity,uint prime): capacity(capacity),p(prime) {
+    // this->capacity = capacity;
     table = new HashNode<T>*[capacity];
     for (int i = 0; i < capacity; i++) {
         table[i] = nullptr;
@@ -70,10 +85,10 @@ HashMap<T>::~HashMap() {
 
 // Hash function
 template <typename T>
-int HashMap<T>::hash(std::string key) {
-    int hash = 0;
+unsigned int HashMap<T>::hash(std::string key) {
+    uint hash = 0;
     for (int i = 0; i < key.length(); i++) {
-        hash = (hash * 31 + key[i] + 128) % capacity;
+        hash = ((hash * p + key[i] ) % capacity +capacity)%capacity;
     }
     return hash;
 }
@@ -81,7 +96,9 @@ int HashMap<T>::hash(std::string key) {
 // Insert key-value pair
 template <typename T>
 void HashMap<T>::insert(std::string key, T value) {
-    int index = hash(key);
+    if(key=="")
+        return;
+    uint index = hash(key);
     HashNode<T>* node = table[index];
     while (node != nullptr) {
         if (node->key == key) {
@@ -98,7 +115,7 @@ void HashMap<T>::insert(std::string key, T value) {
 // Get value by key
 template <typename T>
 T HashMap<T>::get(std::string key) {
-    int index = hash(key);
+    uint index = hash(key);
     HashNode<T>* node = table[index];
     while (node != nullptr) {
         if (node->key == key) {
@@ -112,7 +129,7 @@ T HashMap<T>::get(std::string key) {
 // Remove key-value pair
 template <typename T>
 void HashMap<T>::remove(std::string key) {
-    int index = hash(key);
+    uint index = hash(key);
     HashNode<T>* node = table[index];
     HashNode<T>* prev = nullptr;
     while (node != nullptr) {
@@ -132,7 +149,7 @@ void HashMap<T>::remove(std::string key) {
 // Update value by key
 template <typename T>
 void HashMap<T>::update(std::string key, T value) {
-    int index = hash(key);
+    uint index = hash(key);
     HashNode<T>* node = table[index];
     while (node != nullptr) {
         if (node->key == key) {
